@@ -16,7 +16,9 @@ public class MainMenu extends Parent {
   private int numberOfMenuItemBoxes; //number of folder-button-extensions groups
   private HBox labelBox; // contains folder-button-extensions groups
   private MenuItemBox[] menuItemBox; // folder-button-extensions group
+  private MenuItemBox sourseFolderBox;
   private Button moveButton;
+  private Label soursePathLabel;
   private Label pathLabel;
   private Label extentionLabel;
   private MainMenuBar menuBar;
@@ -32,6 +34,9 @@ public class MainMenu extends Parent {
     mainMenuVBox.setTranslateX(20);
     mainMenuVBox.setTranslateY(50);
     mainMenuVBox.setSpacing(10);
+    
+    soursePathLabel = new Label("Choose sourse directory");
+    sourseFolderBox = new MenuItemBox("");
 
     pathLabel = new Label("Path to destinition folder:");
     extentionLabel = new Label("Extentions (for example: bmp, jpg, gif)");
@@ -40,7 +45,7 @@ public class MainMenu extends Parent {
     labelBox.setSpacing(250);
     labelBox.getChildren().addAll(pathLabel, extentionLabel);
 
-    mainMenuVBox.getChildren().addAll(labelBox);
+    mainMenuVBox.getChildren().addAll(soursePathLabel, sourseFolderBox, labelBox);
     
     for (int i = 0; i < numberOfMenuItemBoxes - 1; i++) {
       menuItemBox[i] = new MenuItemBox();

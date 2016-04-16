@@ -4,6 +4,7 @@ import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.DirectoryChooser;
@@ -24,6 +25,7 @@ public class MenuItemBox extends HBox {
   MenuItemBox() {
     super();
     initialize();
+    getChildren().addAll(pathTextField, button, extensionsTextField);
   }
 
   /**
@@ -32,11 +34,13 @@ public class MenuItemBox extends HBox {
   MenuItemBox(String mode) {
     super();
     initialize();
-    extensionsTextField.setText(mode);
+    Label label = new Label(mode);
+    label.setPrefHeight(25);
+    getChildren().addAll(pathTextField, button, label);
   }
 
   /**
-   * This functuin initializes the object
+   * This function initializes the object
    */
   private void initialize() {
     this.setSpacing(10);
@@ -59,6 +63,5 @@ public class MenuItemBox extends HBox {
         pathTextField.setText(file.getAbsoluteFile().toString());
       }
     });
-    getChildren().addAll(pathTextField, button, extensionsTextField);
   }
 }
