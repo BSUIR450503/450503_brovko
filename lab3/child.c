@@ -31,28 +31,35 @@ int main(int argc, char**argv)
 	    if(child_semafor == 0)
 	      {
 	      	sem_post(semafor);
-		read(file_descriptor[0], read_buffer, sizeof(read_buffer));
-		printf("The transmitted string: %s", read_buffer);
+			read(file_descriptor[0], read_buffer, sizeof(read_buffer));
+			printf("The transmitted string: %s", read_buffer);
 
-  	  	if (read_buffer[0] == '/') 
-  	  	{
-  	  	  	sem_close(semafor);
-  		    sem_close(semafor1);
-	    	  exit(0);
-    	}
-		sem_trywait(semafor);
+  	  		if (read_buffer[0] == '/') 
+  	  		{
+  	  	 	 	sem_close(semafor);
+  		 	    sem_close(semafor1);
+	    		exit(0);
+    		}
+			sem_trywait(semafor);
 	    }
 
 	    sem_getvalue(semafor1, &child_semafor1);
-
 	    if(child_semafor1 == 0) {
-	    sem_post(semafor1);
-	    printf("Enter the string\n");
-	    fgets(write_buffer, sizeof(write_buffer), stdin);
-		printf("Ready to transmit\n");
-		write(pipes[1], write_buffer, strlen(write_buffer) + 1);
-		printf("The string has been sent\n");
-		sem_trywait(semafor1);
+	    	sem_post(semafor1);
+	    	printf("Enter the string\n");
+	    	fgets(write_buffer, sizeof(write_buffer), stdin);
+			printf("Ready to transmit\n");
+			write(pipes[1], write_buffer, strlen(write_buffer) + 1);
+			printf("The string has been sent\n");
+			sem_trywait(semafor1);
+			if (write_buffer[0] == '/') 
+    		{
+    			sem_close(semafor);
+      			sem_close(semafor1);
+      			close(file_descriptor[0]);
+				close(pipes[1]); 
+      			exit(0);
+    	  	}
 		}
 
 	  }  
@@ -82,7 +89,6 @@ int main()
 
 	USES_CONVERSION;
 
-
 	hMapFile = OpenFileMapping(
 		FILE_MAP_ALL_ACCESS,   // read/write access
 		FALSE,                 // do not inherit the name
@@ -111,7 +117,6 @@ int main()
 
 		return -1;
 	}
-
 
 	TCHAR string[SIZE];
 	char buffer[SIZE];
@@ -158,7 +163,7 @@ int main()
 	while (TRUE)
 	{
 
-		WaitForSingleObject(print_sem1, INFINITE);
+		WaitForSingleObject(sem, INFINITE);
 		lpszAscii = T2A((LPTSTR)pBuf);
 		int len = strlen(lpszAscii);
 		char something[256];
@@ -173,7 +178,7 @@ int main()
 		fgets(buffer, SIZE, stdin);
 		_tcscpy(string, A2T(buffer));
 		CopyMemory((PVOID)buffer_pointer, string, (SIZE - 1 * sizeof(TCHAR)));
-		ReleaseSemaphore(print_sem, 0, NULL);
+		ReleaseSemaphore(sem1, 0, NULL);
 	}
 		Sleep(100000);
 

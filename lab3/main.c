@@ -87,27 +87,36 @@ int main(int argc, char*argv[])
 	  	{
 		sem_getvalue(semafor1, &parent_semafor1);
    		 if(parent_semafor1 == 0)
-   		 	{
+   		 {
   			read(pipes[0], read_buffer, sizeof(read_buffer));
    			printf("The transmitted string: %s", read_buffer);
-    		if (read_buffer[0] == '/') {
-    		sem_close(semafor);
-      		sem_close(semafor1);
-      		exit(0);
+    		if (read_buffer[0] == '/') 
+    		{
+    			sem_close(semafor);
+      			sem_close(semafor1);
+      			exit(0);
     	  	}
-      	} 
+      	}
 
 	    sem_getvalue(semafor, &parent_semafor);
-	    if(0 == parent_semafor )
+	    if(parent_semafor == 0)
 	      {
-          sem_post(semafor);
-		printf("Enter the string\n");
-		fgets(write_buffer, sizeof(write_buffer), stdin);
-		printf("Ready to transmit\n");
-		write(file_descriptor[1], write_buffer, strlen(write_buffer) + 1);
-		printf("The string has been sent\n");
-		sem_trywait(semafor);
-}
+          	sem_post(semafor);
+			printf("Enter the string\n");
+			fgets(write_buffer, sizeof(write_buffer), stdin);
+			printf("Ready to transmit\n");
+			write(file_descriptor[1], write_buffer, strlen(write_buffer) + 1);
+			printf("The string has been sent\n");
+			sem_trywait(semafor);
+			if (write_buffer[0] == '/') 
+    		{
+    			sem_close(semafor);
+      			sem_close(semafor1);
+      			close(file_descriptor[0]);
+				close(pipes[1]); 
+      			exit(0);
+    	  	}
+		  }
 	  }
 	waitpid(p, NULL, 0);
 	exit(0);
