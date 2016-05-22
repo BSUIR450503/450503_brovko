@@ -5,24 +5,20 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-// TODO: add elements to menu bar, load fonts, create scroll panel and possibility to add more
-// folders
 
 /**
- * @author tatiana Main class
+ * Main class
  */
 public class Main extends Application {
-  private final int SCREEC_HEIGTH = 800;
-  private final int SCREEC_WIDTH = 600;
 
-  @Override
-  public void start(Stage primaryStage) {
+  @Override public void start(Stage primaryStage) {
     try {
       BorderPane root = new BorderPane();
 
-      root.setPrefSize(SCREEC_HEIGTH, SCREEC_WIDTH);
+      root.setPrefSize(800, 600);
       primaryStage.setResizable(false);
       primaryStage.setTitle("mmm");
+      System.setProperty("prism.lcdtext", "false"); //makes fonts look better
 
       MainMenu menu = new MainMenu();
       root.getChildren().addAll(menu);
@@ -31,8 +27,6 @@ public class Main extends Application {
       primaryStage.setScene(scene);
       primaryStage.show();
     } catch (NullPointerException e) {
-      e.printStackTrace();
-    } catch (Exception e) {
       e.printStackTrace();
     }
   }
